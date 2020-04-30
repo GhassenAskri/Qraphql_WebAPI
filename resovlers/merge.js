@@ -1,5 +1,9 @@
+const User = require("../models/user");
+const Event = require('../models/event')
+
 exports.events = async (eventsIds) => {
     const events = await Event.find({ _id: { $in: eventsIds } });
+   
     try {
       return events.map((eventToTreat, i) => {
           return transformedEvent(eventToTreat)  
@@ -15,10 +19,10 @@ exports.user = async (userId) => {
       return {
         ...user._doc,
         id: user.id,
-        eventsCreated: events.bind(this, user.eventsCreated),
+        eventsCreated: this.events.bind(this, user.eventsCreated),
       };
     } catch (error) {
-      throw error;
+      throw new Error('Error from merge'+error);
     }
   };
 

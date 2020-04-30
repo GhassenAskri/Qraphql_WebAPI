@@ -1,38 +1,37 @@
-
 const Event = require("../models/event");
 const Booking = require("../models/booking");
-const { dateToString } = require("../helpers/date")
-const { user , singleEvent } = require('./merge')
+const { dateToString } = require("../helpers/date");
+const { user, singleEvent } = require("./merge");
 
 const transformedBooking = (booking) => {
-    return {
-        ...booking._doc,
-        _id: booking.id,
-        event : singleEvent.bind(this,booking.event),
-        user : user.bind(this,booking.user),
-        createdAt: dateToString(booking.createdAt),
-        updatedAt: dateToString(booking.updatedAt)
-      };
-}
+  return {
+    ...booking._doc,
+    _id: booking.id,
+    event: singleEvent.bind(this, booking.event),
+    user: user.bind(this, booking.user),
+    createdAt: dateToString(booking.createdAt),
+    updatedAt: dateToString(booking.updatedAt),
+  };
+};
 
 module.exports = {
   booking: async (req) => {
-    if( req.isAuth == false ){
-      throw new Error('User not authenticated')
+    if (req.isAuth == false) {
+      throw new Error("User not authenticated");
     }
     try {
       const bookings = await Booking.find();
       bookings.map((booking) => {
-       return  transformedBooking(booking)
+        return transformedBooking(booking);
       });
     } catch (error) {
       console.log(error);
     }
   },
-  
-  bookEvent: async (args ,req) => {
-    if( req.isAuth == false ){
-      throw new Error('User not authenticated')
+
+  bookEvent: async (args, req) => {
+    if (req.isAuth == false) {
+      throw new Error("User not authenticated");
     }
     try {
       const fetchedEvent = await Event.findOne({ _id: args.eventId });
@@ -42,18 +41,28 @@ module.exports = {
         user: req.userId,
       });
       const res = await booking.save();
-      return transformedBooking(res)
+      return transformedBooking(res);
     } catch (error) {
       console.log(error);
     }
   },
 
-  cancelEvent: async (args) => {
-    const BookedEvent = await Booking.findById(args.bookingId).populate(
-      "event"
-    );
-
-    return transformedBooking(BookedEvent)
-    await Booking.findByIdAndDelete({ _id: args.bookingId });
+  cancelEvent: async (args, req) => {
+    if (req.isAuth == false) {
+      throw new Error("User not authenticated");
+    }
+    try {
+      const bookedEvent = await Booking.findById(args.bookingId).populate(
+        "event"
+      );
+      const creatorEvent = await user(bookedEvent._doc.event.creator);
+      if (req.userId != creatorEvent.id) {
+        throw new Error("permission denied");
+      }
+      await Booking.findByIdAndDelete({ _id: args.bookingId });
+      return transformedBooking(BookedEvent);
+    } catch (error) {
+      throw error;
+    }
   },
 };

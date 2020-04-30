@@ -20,10 +20,10 @@ module.exports =(req,res,next)=> {
 
     try {
         decodedToken = jsonWebToken.verify(token,process.env.SECRET_KEY)
-        console.log(decodedToken)
+       
     } catch (error) {
         req.isAuth = false ;
-        console.log(error)
+        
         return next();
     }
 
