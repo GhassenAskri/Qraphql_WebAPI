@@ -16,7 +16,10 @@ const transformedBooking = (booking) => {
 }
 
 module.exports = {
-  booking: async () => {
+  booking: async (req) => {
+    if( req.isAuth == false ){
+      throw new Error('User not authenticated')
+    }
     try {
       const bookings = await Booking.find();
       bookings.map((booking) => {
@@ -27,13 +30,16 @@ module.exports = {
     }
   },
   
-  bookEvent: async (args) => {
+  bookEvent: async (args ,req) => {
+    if( req.isAuth == false ){
+      throw new Error('User not authenticated')
+    }
     try {
       const fetchedEvent = await Event.findOne({ _id: args.eventId });
 
       const booking = new Booking({
         event: fetchedEvent,
-        user: "5ea825f1c3633853b0be3e1a",
+        user: req.userId,
       });
       const res = await booking.save();
       return transformedBooking(res)

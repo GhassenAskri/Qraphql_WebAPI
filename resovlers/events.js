@@ -39,12 +39,12 @@ module.exports = {
             description: args.eventInput.description,
             price: +args.eventInput.price,
             date: new Date(args.eventInput.date),
-            creator: "5ea811ab8a037f4b842f05fd",
+            creator: req.userId,
         });
         let createdEvent;
         const eventSaved = await event.save()           
         createdEvent = { ...eventSaved._doc };     
-        let usertosave = await User.findById("5ea811ab8a037f4b842f05fd");
+        let usertosave = await User.findById(userId);
         if (!usertosave) {
             throw new Error(`we can't not find this user sorry .....`);
         }

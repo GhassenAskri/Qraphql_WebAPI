@@ -4,8 +4,7 @@ const User = require("../models/user");
 
 
 generateToken = async ( payload , secretkey )=> {
-    const secretKeyHashed = await bcrypt.hash( secretkey,3)
-    const token =  jsonWebToken.sign(payload,secretKeyHashed)
+    const token =  jsonWebToken.sign(payload,secretkey)
     return token
   },
 
