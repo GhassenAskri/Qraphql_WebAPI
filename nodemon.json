@@ -1,0 +1,10 @@
+{
+    "env" :{
+        "MONGO_USER":"AdminUser",
+        "MONGO_PASSWORD":"azerty",
+        "MONGO_DB":"eventApp",
+        "SECRET_KEY":"eventAppSecretKey",
+        "REFRESH_SECRET_KEY":"eventAppSecretKey"
+
+    }
+}

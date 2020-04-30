@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <style something here>
+          body{
+            background: radial-gradient(circle, #1DB1DD, #23D0D2);
+            color :white;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+          }
+      </style>
+   </head>
+<body>
+    <h1>Event API Portal</h1>
+    <h3>version 1.0.0</h3>
+    <label>Email</label>
+    <input id ="email" type="text"></input>
+    <label>Password</label>
+    <input id ="password" type="password"></input>
+    <button onclick="login()">Login to use your api view </button>
+    <script type="text/javascript">
+    function login (){
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value; 
+        if(password === '223311Aa' && email ==='askrighassem@gmail.com'){
+            document.location.href="http://localhost:3000/api"
+        }
+        else(
+            alert("You have to be eligible to work with this api")
+        )      
+    }
+        
+    </script>
+</body>
+</html>
