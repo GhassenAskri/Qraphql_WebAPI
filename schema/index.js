@@ -18,14 +18,6 @@ module.exports = buildSchema(`
             date : String!
             creator : User!
         }
-        input EventInput {
-            title : String!
-            description:String!
-            price : Float!
-            date : String!
-
-        }
-
         type AuthData {
             userId : ID!,
             accessToken :String!,
@@ -39,11 +31,19 @@ module.exports = buildSchema(`
             password : String
             eventsCreated : [Event!]
         }
+
+        input EventInput {
+            title : String!
+            description:String!
+            price : Float!
+            date : String!
+
+        }
+              
         input UserInput {
             email : String!
             password : String
         }
-
 
         type RootQuery {
             events : [Event!]!

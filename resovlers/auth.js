@@ -30,15 +30,17 @@ module.exports = {
   },
 
   login : async (args) => {
+    try {
         const user = await User.findOne({email : args.email})
         if( !user ){
-            throw new Error( 'user not found ')
+            throw new Error( "your email not found ")
         }
         else {
             console.log(user.email)
             const isAvalidUser = await bcrypt.compare(args.password, user.password)
+            console.log(isAvalidUser)
             if(!isAvalidUser){
-                throw new Error ('check your password')
+                throw new Error ("check your password")
             }
             else {  
                 const payload = { _id : user.id}       
@@ -51,6 +53,9 @@ module.exports = {
                   tokenExpiration : 2
                }
             }
+        }}
+        catch(error){
+          throw error 
         }
        
   } 

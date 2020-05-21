@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const apiSchema = require('./schema/index')
 const apiResolvers = require('./resovlers/index')
 const isAuth  = require ('./middleware/isAuth')
-
+var cors = require('cors')
 
 
 //Defining the app server...... 
@@ -13,12 +13,24 @@ const app = express();
 app.get('/',(req,res,next)=>{
     res.sendFile('index.html', { root : __dirname });
 })
+
 //Use a middleware to parse the coming json object 
-app.use(bodyParser.json())
+
 //Use graphqlHttp as middleware using express-graphql and define shema and the rootValue 
 
-
+app.use((req,res,next)=>{
+    res.setHeader('Access-Control-Allow-Origin','*')
+    res.setHeader('Access-Control-Allow-Methods','POST,GET,OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
+    if(req.method ==='OPTIONS'){
+        return res.sendStatus(200)
+    }
+    next();
+});
+// app.use(bodyParser.json())
 app.use(isAuth)
+
+
 
 
 app.use('/api',graphqlHttp({

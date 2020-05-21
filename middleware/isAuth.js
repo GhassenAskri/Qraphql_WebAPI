@@ -20,6 +20,7 @@ module.exports =(req,res,next)=> {
 
     try {
         decodedToken = jsonWebToken.verify(token,process.env.SECRET_KEY)
+
        
     } catch (error) {
         req.isAuth = false ;
@@ -33,5 +34,7 @@ module.exports =(req,res,next)=> {
     }
     req.isAuth = true; 
     req.userId = decodedToken._id 
+    console.log(req.userId);
+    
     return next()
 }

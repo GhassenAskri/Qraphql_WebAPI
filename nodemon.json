@@ -5,6 +5,5 @@
         "MONGO_DB":"eventApp",
         "SECRET_KEY":"eventAppSecretKey",
         "REFRESH_SECRET_KEY":"eventAppSecretKey"
-
     }
 }

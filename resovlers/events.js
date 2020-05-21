@@ -5,9 +5,10 @@ const { dateToString } = require("../helpers/date")
 const { user } = require('./merge')
 
 const transformedEvent = ( event ) => {
+  // console.log('transformed event',event._id)
     return {
-        ...event._doc,
-        id: event.id,
+        ...event,
+        id: event._id,
         date : dateToString(event.date),
         creator: user.bind(this, event.creator),
       };
@@ -34,6 +35,9 @@ module.exports = {
       throw new Error('User not authenticated')
     }
      try {
+       console.log(req.userId); 
+       console.log(args.eventInput.title)
+           
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,
@@ -43,8 +47,11 @@ module.exports = {
         });
         let createdEvent;
         const eventSaved = await event.save()           
-        createdEvent = { ...eventSaved._doc };     
-        let usertosave = await User.findById(userId);
+        createdEvent = { ...eventSaved._doc }; 
+        console.log(createdEvent);
+        let usertosave = await User.findById(req.userId);
+        console.log(usertosave);
+        
         if (!usertosave) {
             throw new Error(`we can't not find this user sorry .....`);
         }
